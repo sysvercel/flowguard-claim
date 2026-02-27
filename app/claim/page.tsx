@@ -1,10 +1,13 @@
-export default function Home() {
+// app/claim/page.tsx
+import { Suspense } from "react";
+import ClaimClient from "./ClaimClient";
+
+export const dynamic = "force-dynamic";
+
+export default function ClaimPage() {
   return (
-    <main className="min-h-screen flex items-center justify-center bg-black text-white p-6">
-      <div className="w-full max-w-md rounded-2xl bg-zinc-900/60 border border-white/10 shadow-2xl p-8 text-center">
-        <h1 className="text-3xl font-bold mb-2">FlowGuard</h1>
-        <p className="text-white/70">Homepage ready.</p>
-      </div>
-    </main>
+    <Suspense fallback={<div className="min-h-screen bg-black" />}>
+      <ClaimClient />
+    </Suspense>
   );
 }
