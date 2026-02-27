@@ -1,13 +1,16 @@
-"use client"
+"use client";
+
+import { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
+
 export const dynamic = "force-dynamic";
-import { useSearchParams } from "next/navigation"
 
-export default function ClaimPage() {
-  const params = useSearchParams()
+function ClaimInner() {
+  const params = useSearchParams();
 
-  const status = params.get("status")
-  const property = params.get("property")
-  const claimedBy = params.get("claimed_by")
+  const status = params.get("status");
+  const property = params.get("property");
+  const claimedBy = params.get("claimed_by");
 
   const getContent = () => {
     switch (status) {
@@ -16,52 +19,58 @@ export default function ClaimPage() {
           title: "Incident Claimed",
           message: "You have successfully claimed this incident.",
           color: "text-green-500",
-        }
+        };
       case "already_claimed":
         return {
           title: "Already Claimed",
           message: "This incident has already been claimed.",
           color: "text-yellow-500",
-        }
+        };
       case "expired":
         return {
           title: "Link Expired",
           message: "This claim link has expired.",
           color: "text-red-500",
-        }
+        };
       default:
         return {
-          title: "Invalid Request",
-          message: "Missing or invalid claim information.",
-          color: "text-gray-400",
-        }
+          title: "Invalid Link",
+          message: "This claim link is not valid.",
+          color: "text-red-500",
+        };
     }
-  }
+  };
 
-  const content = getContent()
+  const content = getContent();
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-black text-white">
-      <div className="max-w-md w-full p-8 bg-zinc-900 rounded-2xl border border-zinc-800 text-center">
-        <h1 className={`text-2xl font-bold ${content.color}`}>
-          {content.title}
-        </h1>
+    <div className="min-h-screen flex items-center justify-center bg-black text-white p-6">
+      <div className="w-full max-w-md rounded-2xl bg-zinc-900/60 border border-white/10 shadow-2xl p-8 text-center">
+        <h1 className={`text-3xl font-bold mb-2 ${content.color}`}>{content.title}</h1>
+        <p className="text-white/80 mb-6">{content.message}</p>
 
-        <p className="mt-4 text-zinc-300">
-          {content.message}
-        </p>
-
-        {(property || claimedBy) && (
-          <div className="mt-6 text-sm text-zinc-400 space-y-2">
-            {property && <div>Property: {property}</div>}
-            {claimedBy && <div>Claimed By: {claimedBy}</div>}
-          </div>
+        {property && (
+          <p className="text-white/60 text-sm mb-2">
+            Property: <span className="text-white/80">{property}</span>
+          </p>
         )}
 
-        <div className="mt-8 text-xs text-zinc-500">
-          FlowGuard Leak Detection System
-        </div>
+        {claimedBy && (
+          <p className="text-white/60 text-sm mb-8">
+            Claimed By: <span className="text-white/80">{claimedBy}</span>
+          </p>
+        )}
+
+        <p className="text-white/30 text-xs">FlowGuard Leak Detection System</p>
       </div>
-    </main>
-  )
+    </div>
+  );
+}
+
+export default function ClaimPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-black" />}>
+      <ClaimInner />
+    </Suspense>
+  );
 }
