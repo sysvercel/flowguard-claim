@@ -8,6 +8,9 @@ export default function ClaimClient() {
   const status = params.get("status");
   const property = params.get("property");
   const claimedBy = params.get("claimed_by");
+  const address = params.get("address");
+  const device = params.get("device");
+  const detected = params.get("detected");
 
   const getContent = () => {
     switch (status) {
@@ -49,6 +52,24 @@ export default function ClaimClient() {
         {property && (
           <p className="text-white/60 text-sm mb-2">
             Property: <span className="text-white/80">{property}</span>
+          </p>
+        )}
+
+        {address && (
+          <p className="text-white/60 text-sm mb-2">
+            Address: <span className="text-white/80">{address}</span>
+          </p>
+        )}
+
+        {device && (
+          <p className="text-white/60 text-sm mb-2">
+            Device: <span className="text-white/80">{device}</span>
+          </p>
+        )}
+
+        {detected && (
+          <p className="text-white/60 text-sm mb-2">
+            Detected: <span className="text-white/80">{detected}</span>
           </p>
         )}
 
